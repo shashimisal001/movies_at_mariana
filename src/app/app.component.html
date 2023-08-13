@@ -1,0 +1,59 @@
+<!-- Filter & search #Start -->
+<div class="container">
+  <div class="row mb-2">
+    <div class="col-2">
+      <select class="form-select form-select-sm" [(ngModel)]="filter.genreId" (change)="filterMovies()">
+        <option selected value="0">Filter by genre</option>
+        <option [value]="genre.id" *ngFor="let genre of genres">{{ genre.name }}</option>
+      </select>
+    </div>
+    <div class="col-2 ms-auto">
+      <input type="text" class="form-control-sm" [(ngModel)]="filter.movieTitle" 
+      (keyup)="filterMovies()" placeholder="Search by movie title">
+    </div>
+  </div>
+  <!-- Filter & Search #End -->
+
+  <!-- Movies table #Start -->
+  <table class="table table-dark">
+    <caption>Movies of the year</caption>
+    <thead>
+      <tr>
+        <th scope="col">Month</th>
+        <th scope="col">Day</th>
+        <th scope="col">Title</th>
+        <th scope="col">Genre</th>
+        <th scope="col">Realesed</th>
+        <th scope="col">Run Time</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let movieScheduleMonthWise of moviesScheduleMonthWise">
+        <tr>
+          <td [attr.rowspan]="getRowSpanForMonth(movieScheduleMonthWise)">
+            <span class="h5">{{ getMonthName(movieScheduleMonthWise.showMonth) }}</span>
+          </td>
+        </tr>
+        <ng-container *ngFor="let movieScheduleDayWise of movieScheduleMonthWise.moviesScheduleDayWise">
+          <tr>
+            <td [attr.rowspan]="movieScheduleDayWise.movies.length+1">
+              <span class="lead">{{ movieScheduleDayWise.showDay }}</span>
+            </td>
+          </tr>
+          <ng-container *ngFor="let movie of movieScheduleDayWise.movies">
+            <tr class="align-middle">
+              <td>
+                <img src="/assets/img/movie_posters/{{ movie.poster }}" alt="{{ movie.title }}"/>
+                <span class="h5 ms-2">{{ movie.title }}</span>
+              </td>
+              <td>{{ getGenreName(movie.genreId) }}</td>
+              <td>{{ movie.releaseYear }}</td>
+              <td>{{ movie.runTime }}</td>
+            </tr>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </tbody>
+  </table>
+  <!-- Movies table #End -->
+</div>
